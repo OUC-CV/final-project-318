@@ -1,10 +1,14 @@
 # 计算机视觉项目报告
 
+> 项目代码位于master分支，介绍视频链接：[B站视频链接地址]()
+
 ## 一. 绪论
 
-B站视频链接地址
+​	  在第一次中实验中，我们使用Debevec算法将多张曝光不同的图片合成为HDR图像，主要的过程为：图像对齐、恢复相机响应函数和使用MergeDebevec合成HDR图像，但实验效果不太理想。我们小组认为主要原因可能为图片对齐合成后会出现重影，以及使用的图像合成方法效果较差。为了实现更好的合成效果，我们从图像对齐和合成算法两方面入手查阅了相关文献，并使用已有的模型及算法对HDR图像重新合成。
 
-​	  在第一次中作业中，我们实现了将多张曝光不同的图片合成为HDR图像。主要的过程为：图像对齐、恢复相机响应函数和使用MergeDebevec合成HDR图像。但是，作业的完成效果不是很好。我们小组认为，效果不好的原因主要有：图片对齐合成后会出现重影、使用的图像合成方法效果较差。为了解决这些问题，实现更好的合成效果，我们查阅了一些论文，使用了一些已有的模块对HDR图像重新合成。针对图像对齐问题，我们学习并复现了一篇Phuoc-Hieu Le等人的论文，使用论文中的神经网络模型，将单张图像生成多个曝光图像，这种方式生成的图像对齐良好，不会有重影问题。对于合成方式，我们使用曝光融合算法对模型生成的多曝光图像重新合成。曝光融合算法的优势在于不需要标定相机响应曲线，并且跳过色调映射步骤，直接合成用于显示的HDR图像，不仅可以简化流程，还避免了色调映射过程中可能引入的伪影和失真问题，这有助于保持图像的自然外观和真实感。Phuoc-Hieu Le的论文中，使用软件Photomatix来生成对应的HDR图像，经过色调映射之后显示图像。为了评估HDR图像的优劣，我们计算了一些参数指标来评估不同的合成方法。我们分别对第一次作业、Photomatix、曝光融合算法生成的HDR图像进行对比评估，使用的指标为：峰值信噪比PSNR、结构相似性SSIM 、感知图像补丁相似度LPIPS。通过指标的评估可以看出，改进过后的HDR图像合成方式效果更好。
+​		针对图像对齐问题，我们采用了Phuoc-Hieu Le等人的论文提出的将单张图像生成多个曝光图像的模型。这种方式生成的图像对齐良好，不会有重影问题。对于合成方式，我们使用曝光融合算法对模型生成的多曝光图像重新合成。曝光融合算法的优势在于不需要标定相机响应曲线和曝光时间，并且跳过色调映射步骤，直接合成用于显示的效果图，不仅可以简化流程，还避免了色调映射过程中可能引入的伪影和失真问题，这有助于保持图像的自然外观和真实感。
+
+​		为了评估生成的HDR图像的优劣，我们计算了一些评估指标来评估不同的合成方法。我们分别对第一次实验、Photomatix软件合成、曝光融合算法生成的HDR图像进行对比评估，使用的指标为：峰值信噪比PSNR、结构相似性SSIM 、感知图像补丁相似度LPIPS。通过指标的评估以及效果图可以看出，改进过后的HDR图像合成方式明显优于实验中算法结果。
 
 ## 二.  相关工作
 
@@ -14,7 +18,7 @@ B站视频链接地址
 
 ​		对于图像效果较大的图像，我们可以肉眼分辨图像质量的好坏，但是对于细微的差别人眼无法精准的估计。对于图像质量的评估可以分为客观评估方法和主观评估方法，PSNR和SSIM等函数虽然量化了图像的质量，但是无法解释人类感知的差别。目前的图像质量评价多数采用预训练的模型和神经网络。LPIPS利用预训练的神经网络提取图像特征，然后计算特征之间的距离，而HDR-VDP-2是专门为HDR图像设计的质量评估指标，通过模拟人眼对亮度、对比度和视觉掩蔽效应的响应来评估图像质量。
 
-​		在我们的项目中，我们首先完成了论文Single-Image HDR Reconstruction by Multi-Exposure Generation的复现，测试了论文中提出的模型性能，并且学习了其中单张照片生成多曝光图像的方法。为了更方便地进行图像处理，我们对测试文件的代码进行了修改并根据图片命名调整目录结构以便后续评估工作的进行。将生成的多曝光图使用Photomatix软件进行合成，得到HDR_pho图像，将多曝光图像使用曝光融合算法合成，得到HDR_exp图像，最后使用第一次作业中完成的内容合成，得到HDR_work图像。在评估时，每张原图都有三张不同方式合成的HDR图像，我们对生成的图像用指标评估后可以评价HDR图像的合成效果。
+​		在我们的项目中，我们首先完成了论文Single-Image HDR Reconstruction by Multi-Exposure Generation的复现，测试了论文中提出的模型性能，并且学习了其中单张照片生成多曝光图像的方法。为了更方便地进行图像处理，我们对测试文件的代码进行了修改并根据图片命名调整目录结构以便后续评估工作的进行。将生成的多曝光图使用Photomatix软件进行合成，得到HDR_pho图像，将多曝光图像使用曝光融合算法合成，得到HDR_exp图像，最后使用第一次实验中完成的内容合成，得到HDR_work图像。在评估时，每张原图都有三张不同方式合成的HDR图像，我们对生成的图像用指标评估后可以评价HDR图像的合成效果。
 
 ### 2. 背景资料
 
@@ -38,17 +42,19 @@ B站视频链接地址
 
 #### 		2.4 训练集和测试集
 
-　　我们的训练集和测试集直接使用 Phuoc-Hieu Le的论文中使用的数据集[DrTMO](https://uithcm-my.sharepoint.com/:u:/g/personal/17520474_ms_uit_edu_vn/ET6uk6buZdlDnDkcJlRS_PEB6AoENYqFEqnPB5fn8r-oVQ?e=ddLdbw)。该数据集由Endo等人通过将Grossberg和Nayar的响应函数数据库(DoRF)中的5个代表性crf应用于收集的1043张具有9个曝光值的HDR图像而创建。该过程总共产生46,935张用于训练的 LDR 图像和6,210张用于测试的图像。每个图像的大小为512x512。数据集中的图像涵盖了各种场景，如室内、室外、夜间和白天场景。
+　　我们的训练集和测试集直接使用 Phuoc-Hieu Le的论文中使用的数据集[DrTMO](https://uithcm-my.sharepoint.com/:u:/g/personal/17520474_ms_uit_edu_vn/ET6uk6buZdlDnDkcJlRS_PEB6AoENYqFEqnPB5fn8r-oVQ?e=ddLdbw)。该数据集由Endo等人通过将Grossberg和Nayar的响应函数数据库(DoRF)中的5个代表性crf应用于收集的1043张具有9个曝光值的HDR图像而创建，该过程总共产生46,935张大小为512x512的用于训练的 LDR 图像和6210张用于测试的图像，其中涵盖了室内、室外、夜间和白天等各种场景。
 
 ### 3. 环境和工具
 
 ​		由于项目训练和测试模型对算力以及设备的硬件要求较高，我们使用了云服务器。该服务器搭载的GPU版本为 Tesla P40，实验中用到的显卡驱动为：Nvidia Driver 470.223.02， CUDA版本为： CUDA 11.3 ，cuDNN版本为：cudnn-linux-x86_64-8.9.6.50
 
-本实验模型侧式部分在以下环境配置下进行：
+本实验以下环境进行：
 
 ##### 操作系统
 
-Ubuntu 18.04
+Ubuntu 18.04（模型测试，生成多曝光图像）
+
+Windows 10（曝光融合，结果评估）
 
 ##### 编程语言
 
@@ -57,12 +63,21 @@ python 3.8
 ##### 依赖库
 
 ```python
+# Ubuntu 18.04
 PyTorch 1.11.0 + cu113
 Torchvision 0.12.0+cu113
 PyTorch Lighting 1.4.*
 PIQ 
 Albumentations
 Pandas
+tqdm
+# Windows 10
+OpenCV
+Numpy
+Matplotlib
+Skimage
+PyTorch
+lpips
 tqdm
 ```
 
@@ -88,10 +103,12 @@ tqdm
 
 #### 	1.2 模型的复现
 
+> [原文代码github链接]()
+
 ​		  由于训练集过大无法上传云服务器，导致无法从训练模型的步骤开始复现，我们采用了原文提供的预训练模型[pretrained.ckpt](https://uithcm-my.sharepoint.com/:u:/g/personal/17520474_ms_uit_edu_vn/EZa3EUzeLdNIibgD4vkixl4BgGTywlgSc9YnU7LRR4w_Jg?e=vgaYZr)，在配置环境后对其模型使用作者提供的测试代码进行测试验证预训练模型的性能。主要流程如下：
 
 - 使用SSH工具MobaXterm连接远程服务器
-- 由于我们购买的云服务器并没有安装显卡驱动，所以在配置环境之前先安装了支持的版本的显卡驱动，CUDA，cuDNN
+- 由于我们购买的云服务器并没有安装显卡驱动，所以在配置环境之前首先安装了支持的版本的显卡驱动，CUDA，cuDNN
 
 - 拉取原作者的代码库中的原代码
 
@@ -118,7 +135,7 @@ tqdm
 - 运行测试脚本：
 
   ```python
-  # out_dir：输出结果所在的文件夹路径
+  # out_dir：输出结果所在的文件夹路径，输出结果目录结构为：single_image_hdr/out_dir/图片在测试集中的上级目录/image.png
   # img_path：需要处理的图片路径
   python single_test.py --out_dir output_test \
   	--ckpt pretrained.ckpt \
@@ -149,7 +166,7 @@ tqdm
 
 ### 3. HDR图像评估
 
-​	    在评估过程中我们在测试集中随机抽取100张曝光度为1的图像并对其生成多曝光图像（正向曝光和反向曝光各四张），然后对生成的多曝光图像分别使用Photomatix软件，Exposure Fusion的多曝光合成hdr的方法以及第一次作业中使用的方法进行hdr合成。为对比项目生成的HDR图像的效果，我们计算了一些参数指标来评估不同的合成方法。具体使用的指标有为：PSNR、SSIM、LPIPS。下面对这三个指标进行介绍。
+​	    在评估过程中我们在测试集中随机抽取100张曝光度为1的图像并对其生成多曝光图像（正向曝光和反向曝光各四张），然后对生成的多曝光图像分别使用Photomatix软件，Exposure Fusion的多曝光合成hdr的方法以及第一次实验中使用的方法进行hdr合成。为对比项目生成的HDR图像的效果，我们计算了一些参数指标来评估不同的合成方法。具体使用的指标有为：PSNR、SSIM、LPIPS。下面对这三个指标进行介绍。
 
 **峰值信噪比PSNR**
 
@@ -177,33 +194,66 @@ SSIM取值在0-1之间，值越大质量越好。
 
 ## 四. 结果
 
-### 4.1 论文和模型的复现
+#### 1. 第一次实验效果对比
+
+> 使用实验中提供的数据集中曝光程度居中的图像作为生成多曝光图像的原图，分别为：exposures\img05.jpg，hdr\img_0.25.jpg，Memorial_SourceImages\memorial0066.png
+>
+> 从左到右依次为：原图，结果图，软件合成图，第一次实验结果图
+
+img05.jpg：
+
+<img src="images\img05.jpg" alt="img" style="zoom: 67%;" />
+
+img_0.25.jpg：
+
+<img src="images\img_0.25.jpg" alt="img" style="zoom: 67%;" />
+
+memorial0066.png：
+
+<img src="images\memorial0066.jpg" alt="img" style="zoom: 67%;" />
+
+#### 2. 测试用例
+
+​		除对实验中的图片对比外，我们还从数据集中随机抽取了100张图像，在生成多曝光图像后使用曝光融合算法以及软件合成HDR图像，并对结果进行分析评估以验证实验使用的算法性能。
+
+评估结果如下，其中红色曲线为软件生成图评估结果，绿色曲线为曝光融合算法生成图评估结果：
 
 
 
-
-
-### 4.2 三种方法的比较
-
+<img src="images\evaluate.jpg" alt="img" style="zoom: 67%;" />
 
 
 
+​		由于测试用例为随机取样，所以对于不同的图像使用相同方法合成的效果有较大差别，但对相同图像不同的方法得到的结果较为相似。观察数据可以看出，使用曝光融合算法生成的图像和软件生成HDR图像的效果相近，软件生成图的PSNR指标更好，但是差距不大。
+
+效果图对比如下：
+
+<img src="images\save.jpg" alt="img" style="zoom: 67%;" />
 
 ## 五.总结和讨论
 
- 
+​		在本项目中，我们针对HDR图像的合成效果进行了多方面的改进和分析，从结果中可以看出，经过我们改进之后，HDR图像的合成效果有了显著提升，基本解决了图像对齐不良和重影问题，增加了生成HDR图像的细节和真实感。在我们看来，通过深度学习模型生成的多曝光图像具有良好的对齐效果，避免了传统方法中多张图像对齐不良带来的重影问题。曝光融合算法不需要标定相机响应曲线，并且跳过色调映射步骤，直接生成可用于显示的HDR图像，简化了处理流程，减少了色调映射过程中可能引入的伪影和失真。
 
+​		在完成项目的过程中，我们遇到了很多困难。在论文复现时，我们进行了很多尝试。刚开始我们尝试在自己的电脑windows系统的运行，但是有些函数和扩展包的版本不支持Windows系统，之后我们又尝试了虚拟机环境，但是无法解决GPU的问题，最后购买了云服务器才解决问题。在尝试使用模型时，论文中使用的数据集过大而云服务器的内存不足，无法一次性上传。在编写自己的测试用例时，刚开始使用模型生成的效果图效果很差，对于模型中的参数也无法精准使用，在经过多次的尝试后才生成了效果较好的HDR图像。
 
+​		在解决问题的过程中，我们也有了一些新的反思和思考。我们的项目中使用曝光融合算法来合成HDR图像，这种方式跳过了色调映射步骤，而色调映射也是生成HDR图像中很重要的一个步骤，我们的项目中没有考虑这个因素。此外，在评估HDR图像时，我们使用了三个指标评价HDR图像的合成效果，虽然可以对HDR图像做出客观的评价，但HDR-VDP-2是专门为HDR图像设计的质量评估指标，我们的项目中并没有使用。
 
-
+​		通过本次实验我们对于HDR图像的合成技术有了更详细全面的认识，学到了很多有关深度学习模型和云服务器工具的知识，对于我们的专业学习很很大帮助。
 
 ## 六.个人贡献声明
 
+王锦瑞：搭建云服务器、代码编写、项目报告
 
-
-
+郭雨菲：代码编写、项目报告、视频录制
 
 ## 七. 引用参考
 
+[1] James A Ferwerda, Sumanta N Pattanaik, Peter Shirley, and Donald P Greenberg. A model of visual adaptation for realistic image synthesis. In Proceedings of the 23rd annual conference on Computer graphics and interactive techniques, pages 249–258, 1996.
 
+[2] Xin Yang, Ke Xu, Yibing Song, Qiang Zhang, Xiaopeng Wei, and Rynson WH Lau. Image correction via deep reciprocating hdr transformation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pages 1798–1807, 2018.
 
+[3] P. Burt and T. Adelson. The Laplacian Pyramid as a Compact Image Code. IEEE Transactions on Communication, COM-31:532–540, 1983.
+
+[4] L. Zhang, L. Zhang, X. Mou, and D. Zhang. Fsim: A feature similarity index for image quality assessment. TIP, 2011. 1, 2, 12, 14
+
+[5]  A. Agrawal, R. Raskar, S. K. Nayar, and Y. Li. Removing photography artifacts using gradient projection and flashexposure sampling. ACM Trans. Graph., 24(3):828–835, 2005.
