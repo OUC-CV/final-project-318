@@ -1,6 +1,6 @@
 # 计算机视觉项目报告
 
-> 项目代码位于master分支，介绍视频链接：[B站视频链接地址]()
+> 项目代码位于master分支，介绍视频链接：[B站视频链接地址](https://www.bilibili.com/video/BV1oigeekExc/?pop_share=1&vd_source=eef13c7caeb2529caa6bd395db286d7a)
 
 ## 一. 绪论
 
@@ -103,7 +103,13 @@ tqdm
 
 #### 	1.2 模型的复现
 
-> [原文代码github链接]()
+> [原文代码github链接](https://github.com/VinAIResearch/single_image_hdr)
+> 部分新增代码文件及功能：
+> get_test_image.py -随机抽取100张测试图片
+> single_test.py -对文件夹内所有图片生成多曝光图像
+> test_output.py -根据原测试代码infer_backeted.py修改得到测试用例代码
+> make_hdr.ipynb -生成hdr图像
+> evaluate.py -评估
 
 ​		  由于训练集过大无法上传云服务器，导致无法从训练模型的步骤开始复现，我们采用了原文提供的预训练模型[pretrained.ckpt](https://uithcm-my.sharepoint.com/:u:/g/personal/17520474_ms_uit_edu_vn/EZa3EUzeLdNIibgD4vkixl4BgGTywlgSc9YnU7LRR4w_Jg?e=vgaYZr)，在配置环境后对其模型使用作者提供的测试代码进行测试验证预训练模型的性能。主要流程如下：
 
@@ -121,16 +127,16 @@ tqdm
 
 - 原作者使用OneDrive上传的数据集和模型无法在远程终端直接下载，所以需要先将数据集和模型下载到本地，再使用STFP工具上传至云服务器。这里由于上传压缩包解压后储存空间不足，并且训练集过大，只能本地解压文件然后仅上传测试集数据。
 
-- 根据文档提示设置匹配我们的环境的参数，更改部分测试文件代码以适应当前目录结构，运行测试脚本：
+- 根据文档提示设置匹配我们的环境的参数，修改部分测试文件代码以适应当前项目，运行测试脚本：
 
   ```python
-  python infer_bracketed.py --out_dir results02/ \
+  python test_output.py --out_dir results02/ \
       --ckpt pretrained.ckpt --in_name e.png \
       --num_workers 2 --test_dir training_data/Test/Bracketed_images/ \
       --test_label_path data/test_hdr.csv
   ```
 
-- 根据`infer_bracketed.py`文件编写处理单个文件夹内所有图片的程序[single_test.py]()
+- 根据`infer_bracketed.py`文件编写处理单个文件夹内所有图片的程序[single_test.py](single_test.py)
 
 - 运行测试脚本：
 
@@ -139,7 +145,7 @@ tqdm
   # img_path：需要处理的图片路径
   python single_test.py --out_dir output_test \
   	--ckpt pretrained.ckpt \
-  	--img_path /home/ubuntu/single_image_hdr/mytest
+  	--img_dir /home/ubuntu/single_image_hdr/mytest
   ```
 
 ### 2. 曝光融合算法
@@ -190,7 +196,7 @@ SSIM取值在0-1之间，值越大质量越好。
 
 **感知图像补丁相似度LPIPS**
 
-​		  相较于LPIPS，PSNR和SSIM两种函数无法解释人类感知的许多细微差别。LPIPS通过深度学习模型来评估两个图像之间的感知差异。即使两个图像在像素级别上非常接近，人类观察者也可能将它们视为不同。因此，LPIPS 使用预训练的深度网络来提取图像特征，然后计算这些特征之间的距离，以评估图像之间的感知相似度。通常认为，LPIPS 比传统方法更符合人类的感知情况。LPIPS的值越低表示两张图像越相似，反之，则差异越大。
+​		  相较于LPIPS，PSNR和SSIM两种函数无法解释人类感知的许多细微差别。LPIPS通过深度学习模型来评估两个图像之间的感知差异。即使两个图像在像素级别上非常接近，人类观察者也可能将它们视为不同。因此，LPIPS 使用预训练的深度网络来提取图像特征，然后计算这些特征之间的距离，以评估图像之间的感知相似度。通常认为，LPIPS 比传统方法更符合人类的感知情况。LPIPS的值越低表示两张图像越相似，反之则差异越大。
 
 ## 四. 结果
 
@@ -242,7 +248,7 @@ memorial0066.png：
 
 ## 六.个人贡献声明
 
-王锦瑞：搭建云服务器、代码编写、项目报告
+王锦瑞：搭建环境、代码编写、项目报告
 
 郭雨菲：代码编写、项目报告、视频录制
 
