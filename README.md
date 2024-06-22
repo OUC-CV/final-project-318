@@ -22,13 +22,13 @@ B站视频链接地址
 
 参考论文：[Single-Image HDR Reconstruction by Multi-Exposure Generation](https://openaccess.thecvf.com/content/WACV2023/papers/Le_Single-Image_HDR_Reconstruction_by_Multi-Exposure_Generation_WACV_2023_paper.pdf)　　
 
-​	我们训练并使用了 Phuoc-Hieu Le等人提出的模型，该模型使用弱监督学习，通过反转相机响应，在合成多次曝光之前重建像素辐照度，将一张图片生成多个曝光图像，还能实现模拟填充欠曝和过曝区域的细节。将单张图像生成的多曝光图像，没有对齐的问题，在多曝光图像合成HDR图像之后，对齐良好，几乎不会有重影的问题。
+​	我们使用了 Phuoc-Hieu Le等人提出的模型，该模型使用弱监督学习，通过反转相机响应，在合成多次曝光之前重建像素辐照度，将一张图片生成多个曝光图像，还能实现模拟填充欠曝和过曝区域的细节。将单张图像生成的多曝光图像不存在对齐的问题，在多曝光图像合成HDR图像之后几乎不会有重影。
 
 #### 		2.2 HDR图像合成
 
 参考论文：[Exposure Fusion](https://www.researchgate.net/publication/4295602_Exposure_Fusion/link/53f716940cf2888a7497691d/download?_tp=eyJjb250ZXh0Ijp7ImZpcnN0UGFnZSI6InB1YmxpY2F0aW9uIiwicGFnZSI6InB1YmxpY2F0aW9uIn19)
 
-​	这篇论文提出了新的HDR图像合成方法，用一些指标衡量每张图像中像素的价值，通过拉普拉斯金字塔融合的方式得到HDR图像。我们利用Phuoc-Hieu Le等人的论文中提出的模型生成的多曝光图像，使用曝光融合的方式对HDR图像进行合成。
+​	这篇论文提出了新的HDR图像合成方法——曝光融合，即用一些指标衡量每张图像中像素的价值，通过拉普拉斯金字塔融合的方式得到HDR图像。实验过程中我们利用Phuoc-Hieu Le等人的论文中提出的模型生成的多曝光图像，使用曝光融合的方式对HDR图像进行合成。
 
 #### 		2.3 结果评估
 
@@ -76,13 +76,13 @@ tqdm
 
 ​      这种神经网络是一种新型的端到端的神经网络，是一种弱监督学习，可以生成任意数量的不同曝光图像，用于HDR图像重建。论文中提出的网络由两个阶段组成。第一个阶段是反向映射，在这个阶段中，使用HDR编码网络（N1）将输入图像Ii转换为Xi，这是一种适合图像在曝光时间Δti下的传感器曝光的潜在空间表示。通过适当的因子，可以根据公式：
 
-![formula7](.\formula7.png)
+![formula7](images/formula7.png)
 
 对表示Xi进行缩放，从而获得在较短或较长曝光时间Δti±1下的传感器曝光。
 
 ​       接下来的阶段是前向映射，将场景辐照度Xi映射到改变曝光时间Δti后的像素值，以生成具有不同曝光的新图像。在这个阶段，需要在饱和区域中生成细节。由于欠曝光和过曝光图像的不同性质，我们提出使用两个子网络，分别是升曝光网络（N2）和降曝光网络（N3），分别生成与输入图像相关的高曝光和低曝光图像，这也遵循上述提出的公式。
 
-![img](.\image1.jpg)
+![img](images/image1.jpg)
 
 图片1：模型框架
 
@@ -131,19 +131,19 @@ tqdm
 
 ​       对比度（Contrast）：对每张图像的灰度图应用拉普拉斯滤波器，并取滤波响应的绝对值。这样可以得到一个简单的对比度指标C。这个指标对于边缘和纹理等重要的信息分配很大的权重。
 
-<img src=".\formula1.png" alt="image-20240621220518980" style="zoom: 80%;" />
+<img src="images/formula1.png" alt="image-20240621220518980" style="zoom: 80%;" />
 
 ​      饱和度（Saturation）：随着照片曝光时间的延长，高曝光的位置颜色会变得去饱和甚至没有颜色。饱和度指标S通过计算每个像素在R、G和B通道内的标准偏差来获得，可将RGB三个通道之间的标准差作为饱和度指标。
 
-<img src=".\formula2.png" alt="image-20240621220709028" style="zoom: 50%;" />
+<img src="images/formula2.png" alt="image-20240621220709028" style="zoom: 50%;" />
 
 ​        曝光良好度（Well-exposedness）：观察一个通道内的原始强度值可以揭示像素的曝光情况。将取值在0.5左右的像素视为曝光良好，应该分配很大的权重；接近0和1的分别为欠曝和过曝应该分配很小的权重。像素值与其对应权重的关系符合均值为0.5的高斯分布：
 
-<img src=".\formula3.png" alt="image-20240621220905368" style="zoom:80%;" />
+<img src="images/formula3.png" alt="image-20240621220905368" style="zoom:80%;" />
 
 ​       在获取上述三个指标后，可以计算每个像素对应的权重，在融合时，需要对原始图像加权求和，得到HDR图像。合成图像时，使用了拉普拉斯金字塔融合的方式。从不同曝光的原始图像中分解出拉普拉斯金字塔，对应的权重图中分解出高斯金字塔，然后分别在每个尺度下进行融合，得到融合后的拉普拉斯金字塔。最后，从拉普拉斯金字塔的顶层开始向上采样，叠加同尺度的拉普拉斯细节，再向上采样和叠加细节，递归至最高分辨率，得到最终的结果。
 
-![image](.\image2.png)
+![image](images/image2.png)
 
 图片2：拉普拉斯图像融合的流程
 
@@ -155,11 +155,11 @@ tqdm
 
 ​	峰值信噪比主要用于比较两幅图像之间的相似度或差异。PSNR是基于MSE(均方误差)定义的，对给定一个大小为m*n的原始图像I和对其添加噪声后的噪声图像K，其MSE可定义为：
 
-<img src=".\formula4.jpg" alt="img" style="zoom: 67%;" />
+<img src="images/formula4.jpg" alt="img" style="zoom: 67%;" />
 
 则PSNR可定义为：
 
-<img src=".\formula5.jpg" alt="img" style="zoom: 80%;" />
+<img src="images/formula5.jpg" alt="img" style="zoom: 80%;" />
 
 图像与影像压缩中典型的峰值讯噪比值在30dB 到50dB 之间，PSNR接近50dB ，代表压缩后的图像仅有些许非常小的误差。PSNR大于30dB ，人眼很难察觉压缩后和原始影像的差异，认为图像质量是好的。PSNR介于20dB 到30dB 之间，人眼就可以察觉出图像的差异，被认为图像质量不可接受。
 
@@ -167,7 +167,7 @@ tqdm
 
 ​		SSIM 指标可以衡量图片的失真程度，也可以衡量两张图片的相似程度。与PSNR衡量绝对误差不同，SSIM更符合人眼的直观感受，是一种基于感知的模型。它将图像退化视为结构信息的感知变化，同时还结合了重要的感知现象，如亮度掩蔽和对比度掩蔽。SSIM值是通过不同的图像窗口计算的。 
 
-<img src=".\formula6.jpg" alt="img" style="zoom: 67%;" />
+<img src="images/formula6.jpg" alt="img" style="zoom: 67%;" />
 
 SSIM取值在0-1之间，值越大质量越好。
 
