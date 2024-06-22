@@ -117,7 +117,7 @@ tqdm
   cd single_image_hdr
   ```
 
-- 配置环境：安装Anaconda，根据配置文件[environment.yml](链接)创建虚拟环境并安装对应版本的依赖库
+- 配置环境：安装Anaconda，根据配置文件[environment.yml](environment.yml)创建虚拟环境并安装对应版本的依赖库
 
 - 原作者使用OneDrive上传的数据集和模型无法在远程终端直接下载，所以需要先将数据集和模型下载到本地，再使用STFP工具上传至云服务器。这里由于上传压缩包解压后储存空间不足，并且训练集过大，只能本地解压文件然后仅上传测试集数据。
 
