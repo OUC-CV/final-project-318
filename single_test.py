@@ -34,10 +34,10 @@ def inference(model, img, mask, exps, base_name, out_dir):
         if exp < 1: isUpExposed=False
         pred, _ = model(img, mask, exp, isUpExposed=isUpExposed)  
         folder_dir = os.path.splitext(base_name)[0]
-        filename = f"{folder_dir}_{exp}.tiff"
+        filename = f"{folder_dir}_{exp}.jpg"
         pred = Image.fromarray(getDisplayableImg(pred))
         os.makedirs(os.path.join(out_dir, folder_dir), exist_ok=True)
-        pred.save(os.path.join(out_dir, folder_dir, filename), format='TIFF')
+        pred.save(os.path.join(out_dir, folder_dir, filename))
         
 
 def single_hdr(args):
