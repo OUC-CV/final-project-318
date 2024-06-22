@@ -1,0 +1,12 @@
+myOutput/*/
+!myOutput/
+myTest/*/
+!myTest/
+training_data/Test/*/
+!training_data/Test/
+
+*.csv
+*.zip
+*.ckpt
+*.png
+*.tiff
