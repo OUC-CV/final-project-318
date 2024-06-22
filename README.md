@@ -1,6 +1,7 @@
 # 计算机视觉项目报告
 
 > 项目代码位于master分支，介绍视频链接：[B站视频链接地址](https://www.bilibili.com/video/BV1oigeekExc/?pop_share=1&vd_source=eef13c7caeb2529caa6bd395db286d7a)
+> [实验运行结果results_data.zip](https://pan.baidu.com/s/108vt3SBtetUjNGPe9Mrkbw?pwd=1234)
 
 ## 一. 绪论
 
@@ -223,6 +224,12 @@ memorial0066.png：
 ​		除对实验中的图片对比外，我们还从数据集中随机抽取了100张图像，在生成多曝光图像后使用曝光融合算法以及软件合成HDR图像，并对结果进行分析评估以验证实验使用的算法性能。
 
 评估结果如下，其中红色曲线为软件生成图评估结果，绿色曲线为曝光融合算法生成图评估结果：
+> Average PSNR 1: 23.8942
+> Average PSNR 2: 25.2210
+> Average SSIM 1: 0.7685
+> Average SSIM 2: 0.7649
+> Average lpips1 1: 0.1604
+> Average lpips1 2: 0.1661
 
 
 
