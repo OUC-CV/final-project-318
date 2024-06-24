@@ -1,6 +1,6 @@
 # 计算机视觉项目报告
 
-> 项目代码位于master分支，介绍视频链接：[B站视频链接地址](https://www.bilibili.com/video/BV1oigeekExc/?pop_share=1&vd_source=eef13c7caeb2529caa6bd395db286d7a)
+> 项目代码位于master分支，介绍视频链接：[B站视频链接地址](https://b23.tv/R3I4i9w)
 > [实验运行结果results_data.zip](https://pan.baidu.com/s/108vt3SBtetUjNGPe9Mrkbw?pwd=1234)
 
 ## 一. 绪论
